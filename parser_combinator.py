@@ -44,7 +44,7 @@ parse_addition=apply_template(parse_subtraction,lambda x,y:x+y,"+")
 def parse_expr(s):
     first,s=parse_addition(s)
     pls_sign,s=parse_char(s,"+")
-    second,s=parse_addition(s)
+    second,s=parse_expr(s) if pls_sign else (None,s)
     
     if None in [pls_sign,second]: return (first,s)
     else: return (int(first)+int(second),s)    
