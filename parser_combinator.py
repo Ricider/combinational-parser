@@ -29,7 +29,7 @@ def parser_template(upper_func_name,func_op,func_symbol,s):
     first,s=upper_func_name(s)
     pls_sign,s=parse_char(s,func_symbol)
     if pls_sign==None: return upper_func_name(unmodified_s)
-    second,s=upper_func_name(s)
+    second,s=parser_template(upper_func_name,func_op,func_symbol,s)
     
     if None in [first,pls_sign,second]:return upper_func_name(unmodified_s)
     else: return (func_op(int(first),int(second)),s)
