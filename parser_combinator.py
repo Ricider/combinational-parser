@@ -3,9 +3,8 @@ parse_decimal = lambda s: (s[0],s[1:]) if len(s)>0 and s[0].isnumeric() else (No
 parse_char = lambda s,char: (s[0],s[1:]) if len(s)>0 and s[0]==char else (None,s) 
 
 def parse_int(s):
-    out=""
     sign,s=parse_char(s,"-")
-    if sign: out="-"
+    out = "-" if sign else ""
     while True:
         curr,s = parse_decimal(s)
         if curr==None: break
@@ -17,10 +16,10 @@ def parse_paranthesis(s):
     
     begp,s=parse_char(s,"(")
     if begp==None: return parse_int(unmodified_s)
-    first,s=parse_expr(s)
+    first,s=parse_addition(s)
     endp,s=parse_char(s,")")   
     
-    if None in [endp,begp,first]: return parse_expr(unmodified_s)
+    if None in [endp,begp,first]: return parse_addition(unmodified_s)
     else: return (first,s)
     
 def parser_template(upper_func_name,func_op,func_symbol,s):
@@ -39,14 +38,6 @@ apply_template = lambda upper_func_name,func_op,func_symbol: lambda s: parser_te
 parse_multiplication=apply_template(parse_paranthesis,lambda x,y:x*y,"*")
 parse_division=apply_template(parse_multiplication,lambda x,y:x//y,"/")
 parse_subtraction=apply_template(parse_division,lambda x,y:x-y,"-")
-parse_addition=apply_template(parse_subtraction,lambda x,y:x+y,"+")
+parse_addition=apply_template(parse_subtraction,lambda x,y:x+y,"+") 
 
-def parse_expr(s):
-    first,s=parse_addition(s)
-    pls_sign,s=parse_char(s,"+")
-    second,s=parse_expr(s) if pls_sign else (None,s)
-    
-    if None in [pls_sign,second]: return (first,s)
-    else: return (int(first)+int(second),s)    
-
-while True: print(parse_expr(input("enter input expression: ")))
+while True: print(parse_addition(input("enter input expression: ")))
